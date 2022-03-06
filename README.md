@@ -1,0 +1,2 @@
+# rust-practice
+ learning rustlang
