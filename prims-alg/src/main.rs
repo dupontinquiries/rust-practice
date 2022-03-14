@@ -6,40 +6,74 @@
 
 // fn prim(root: u32, n: Vec<u32>, m: Vec<[u32; 2]>) -> (Vec<u32>, Vec<[u32; 2]>) {
 // root: u32
-// n: vec of u32
+// n: number of nodes in graph
 // m: vec of (cost, u, v)
 // return: vec of (cost, u, v)
-fn prim(root: u32, n: Vec<u32>, m: Vec<[i32, u32, u32]>) -> Vec<[i32, u32, u32]> {
-    // create an empty vec to store the nodes in as the mst expands
-    //let mut mst_n: Vec<u32> = Vec::with_capacity(n.len() as usize);
-    let mut mst_n = vec![false; n.len()];
+fn prim_mst(root: u32, n: u32, m: Vec<(i32, u32, u32)>) -> Vec<(i32, u32, u32)> {
+    // create an empty vec to store the edges in as the mst expands
+    let mut mst_edges = Vec::with_capacity( (n - 1) as usize );
+    // create a vec to store the nodes in as the mst expands
+    let mut visited = vec![false; n as usize];
     // add root node to mst
-    mst_n[root] = true;
+    visited[root as usize] = true;
     // create a sorted (cost, ascending) queue of edges
     let mut m_sorted = m.clone(); // https://stackoverflow.com/questions/21369876/what-is-the-idiomatic-rust-way-to-copy-clone-a-vector-in-a-parameterized-functio
-    m_sorted.sort_by(|a, b| &a.0.cmp(&b.0)); // https://stackoverflow.com/questions/40091161/sorting-a-vector-of-tuples-needs-a-reference-for-the-second-value
-        // add all edges to cost multimap
-        //let mut tmp_M = MultiMap::with_capacity(m.len() as usize);
-        // let mut tmp_M = MultiMap::new();
-        //let mut tmp_m = HashMap::with_capacity(m.len() as usize);
+    m_sorted.sort_by(|a, b| a.0.cmp(&b.0)); // https://stackoverflow.com/questions/40091161/sorting-a-vector-of-tuples-needs-a-reference-for-the-second-value
     // iterate through map until removed n-1 edges
-    let mut count = 0 as u32;
-    while count < n.len() {
-    	// find lowest edge that has only one endpoint in mst_n
+    // let mut count = 0 as u32;
+    while mst_edges.len() < n as usize {
+    	// find lowest edge that has only one endpoint in visited
+        let mut found_option = false;
     	for i in 0..m_sorted.len() {
-            let u = m_sorted.get(i).1;
-            let v = m_sorted.get(i).2;
-            let bool1 = mst_n.contains(u);
-            let bool2 = mst_n.contains(v);
-            // if only one node in mst, add edge to mst_edges & remove from queue
+            // println!("m_sorted: {:?}", m_sorted);
+            let u = m_sorted[i].1;
+            let v = m_sorted[i].2;
+            let bool1 = visited[u as usize];
+            let bool2 = visited[v as usize];
+            // if only one node of edge in mst, add edge to mst_edges & remove from queue
             if (bool1 && !bool2) || (!bool1 && bool2) {
-                v.remove()
+                // mark other node as visited
+                if bool1 {
+                    visited[v as usize] = true;
+                } else {
+                    visited[u as usize] = true;
+                }
+                // add edge to mst_edges
+                mst_edges.push( m_sorted[i as usize] );
+                // remove edge from queue
+                m_sorted.remove(i);
+                // declare a continue
+                found_option = true;
+                break;
             }
-            // remove edge from queue
+        }
+        if !found_option {
+            break;
         }
     }
+    mst_edges
 }
 
 fn main() {
-    println!("Hello, world!");
+    // (weight, u, v)
+    println!("running tests...");
+    println!("{:?}", 0);
+    println!("{:?}", prim_mst(0, 1, vec![]));
+    // expected: []
+    println!("{:?}", 1);
+    println!("{:?}", prim_mst(0, 4, vec![(1, 0, 1), (1, 1, 2), (1, 2, 3)]));
+    // expected: [(1, 0, 1), (1, 1, 2), (1, 2, 3)]
+    println!("{:?}", 2);
+    println!("{:?}", prim_mst(0, 4, vec![(2, 0, 1), (2, 1, 2), (2, 2, 3), (1, 0, 1), (1, 1, 2), (1, 2, 3)]));
+    // expected: [(1, 0, 1), (1, 1, 2), (1, 2, 3)]
+    println!("{:?}", 3);
+    println!("{:?}", prim_mst(0, 4, vec![(1, 0, 1), (2, 1, 2), (1, 2, 3), (1, 3, 0)]));
+    // expected: [(1, 0, 1), (1, 2, 3), (1, 3, 0)]
+    println!("{:?}", 4);
+    println!("{:?}", prim_mst(0, 6, vec![(4, 3, 5), (1, 0, 1), (1, 1, 2), (1, 2, 3), (1, 0, 5), (1, 5, 4)]));
+    // expected: [(1, 0, 1), (1, 1, 2), (1, 2, 3), (1, 0, 5), (1, 5, 4)]
+    println!("{:?}", 5);
+    println!("{:?}", prim_mst(0, 9, vec![(1, 0, 2), (7, 2, 3), (11, 3, 1), (3, 3, 4), (6, 4, 1), (5, 1, 0), (10, 0, 5), (4, 5, 7), (9, 7, 8), (8, 8, 6), (12, 6, 5), (2, 6, 0)])); // L09::p39 from class
+    // expected: [(1, 0, 2), (2, 0, 6), (5, 0, 1), (6, 1, 4), (3, 4, 3), (8, 6, 8), (9, 8, 7), (4, 7, 5)]
+    println!("finished tests");
 }
