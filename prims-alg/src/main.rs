@@ -1,10 +1,3 @@
-
-// use std::collections::HashMap;
-// use multimap::MultiMap;
-// minqueue<(cost: i32, u: u32, v: u32)>
-
-
-// fn prim(root: u32, n: Vec<u32>, m: Vec<[u32; 2]>) -> (Vec<u32>, Vec<[u32; 2]>) {
 // root: u32
 // n: number of nodes in graph
 // m: vec of (cost, u, v)
