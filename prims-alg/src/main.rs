@@ -57,6 +57,44 @@ fn prim_mst(root: u32, n: u32, m: Vec<(i32, u32, u32)>) -> Vec<(i32, u32, u32)> 
 fn main() {
     // (weight, u, v)
     println!("running tests...");
+    // 0
+    assert_eq!(
+        prim_mst(0, 1, vec![]),
+        vec![]
+    );
+    // 1
+    assert_eq!(
+        prim_mst(0, 4, vec![(1, 0, 1), (1, 1, 2), (1, 2, 3)]),
+        vec![(1, 0, 1), (1, 1, 2), (1, 2, 3)]
+    );
+    // 2
+    assert_eq!(
+        prim_mst(0, 4, vec![(2, 0, 1), (2, 1, 2), (2, 2, 3), (1, 0, 1), (1, 1, 2), (1, 2, 3)]),
+        vec![(1, 0, 1), (1, 1, 2), (1, 2, 3)]
+    );
+    // 3
+    assert_eq!(
+        prim_mst(0, 4, vec![(1, 0, 1), (2, 1, 2), (1, 2, 3), (1, 0, 3)]),
+        vec![(1, 0, 1), (1, 0, 3), (1, 2, 3)]
+    );
+    // 4
+    assert_eq!(
+        prim_mst(0, 6, vec![(4, 3, 5), (1, 0, 1), (1, 1, 2), (1, 2, 3), (1, 0, 5), (1, 4, 5)]),
+        vec![(1, 0, 1), (1, 1, 2), (1, 2, 3), (1, 0, 5), (1, 4, 5)]
+    );
+    // 5
+    assert_eq!(
+        prim_mst(0, 9, vec![(1, 0, 2), (7, 2, 3), (11, 1, 3), (3, 3, 4), (6, 1, 4), (5, 0, 1), (10, 0, 5), (4, 5, 7), (9, 7, 8), (8, 6, 8), (12, 5, 6), (2, 0, 6)]),
+        vec![(1, 0, 2), (2, 0, 6), (5, 0, 1), (6, 1, 4), (3, 3, 4), (8, 6, 8), (9, 7, 8), (4, 5, 7)]
+    );
+    // note, indices 1 and 2 are interchangeable for any tuple (weight, u, v) since we assume an undirected graph
+    // also, we can deduce whether or not the algorithm was able to build a tree by checking to see if the return vec's len = n - 1
+    println!("finished tests");
+}
+
+fn debug_print() {
+    // (weight, u, v)
+    println!("running tests...");
     println!("{:?}", 0);
     println!("{:?}", prim_mst(0, 1, vec![]));
     // expected: []
@@ -75,5 +113,7 @@ fn main() {
     println!("{:?}", 5);
     println!("{:?}", prim_mst(0, 9, vec![(1, 0, 2), (7, 2, 3), (11, 3, 1), (3, 3, 4), (6, 4, 1), (5, 1, 0), (10, 0, 5), (4, 5, 7), (9, 7, 8), (8, 8, 6), (12, 6, 5), (2, 6, 0)])); // L09::p39 from class
     // expected: [(1, 0, 2), (2, 0, 6), (5, 0, 1), (6, 1, 4), (3, 4, 3), (8, 6, 8), (9, 8, 7), (4, 7, 5)]
+    // note, indices 1 and 2 are interchangeable for any tuple (weight, u, v) since we assume an undirected graph
+    // also, we can deduce whether or not the algorithm was able to build a tree by checking to see if the return vec's len = n - 1
     println!("finished tests");
 }
