@@ -1,31 +1,53 @@
+use std::{collections::HashMap, collections::HashSet, hash::Hash};
 
-use std::{collections::HashSet, hash::Hash, collections::HashMap};//, collections::OrderedMap};
-
-struct G {
-    n: HashSet<String>,
-    m: HashSet<(u32, String, String)>,
+pub struct Solution<T> {
+    // visited: HashSet<T>,
+    // pre: HashMap<T, f64>,
+    // post: HashMap<T, f64>,
+    // clock: u64,
 }
 
-type Elst = HashMap<String, bool>;
-type Clk = HashMap<String, u32>;
+impl Solution<T> {
 
-fn explore(r: String, g: G, visited: &Elst, pre: &Clk, post: &Clk, &clock: u32) {
-    visited.insert(r, true);
-    pre.insert(r, clock);
-    // pre[r] = clock
-    // ++clock
-    // for each edge (a, b) in E
-    // 	if not visited[b]
-    // 		explore(G, b)
-    post.insert(r, clock);
-    clock += 1;
-    // .
+    pub fn dfs_explore<T>(n: T, g: &HashMap<T, HashSet<T>>) {
+        visited.insert(n);
+        pre.insert(n, clock);
+        clock += 1;
+        // match g.get(n) {
+        //     Some(hs) => dfs_explore(v, &g),
+        //     None => println!("{} is unreviewed.", book)
+        // }
+        for v in g.find(n).into_iter() {
+            if !visited.contains_key(&v) {
+                dfs_explore(v, &g)
+            }
+        }
+        post.insert(n, clock);
+        clock += 1;
+    }
+
+    pub fn dfs<T>(r: T, g: &HashMap<T, HashSet<T>>) {
+        // let mut visited = HashSet<T>::with_capacity(g.n.len() as usize);
+        // let mut pre = HashMap<T, u32>::with_capacity(g.n.len() as usize);
+        // let mut post = HashMap<T, u32>::with_capacity(g.n.len() as usize);
+        // let mut clock = 0 as u32;
+
+        let mut visited: HashSet<T> = HashSet<T>::new();
+        let mut pre: HashMap<T, f64> = HashMap<T, f64>::new();
+        let mut post: HashMap<T, f64> = HashMap<T, f64>::new();
+        let mut clock: u64 = 0;
+
+        visited.insert(r);
+        
+        for (u, neighbors) in g.into_iter() {
+            if !visited.contains_key(&u) {
+                dfs_explore(u, g);
+            }
+        }
+    }
+
 }
 
-fn dfs(r: String, g: G) {
-    let mut visited = Elst::with_capacity( (g.m.len() - 1) as usize );
-    visited.insert(r, true);
-}
 
 fn main() {
     println!("Hello, world!");
