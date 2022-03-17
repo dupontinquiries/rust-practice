@@ -80,6 +80,13 @@ fn main() {
         prim_mst(0, 9, vec![(1, 0, 2), (7, 2, 3), (11, 1, 3), (3, 3, 4), (6, 1, 4), (5, 0, 1), (10, 0, 5), (4, 5, 7), (9, 7, 8), (8, 6, 8), (12, 5, 6), (2, 0, 6)]),
         vec![(1, 0, 2), (2, 0, 6), (5, 0, 1), (6, 1, 4), (3, 3, 4), (8, 6, 8), (9, 7, 8), (4, 5, 7)]
     );
+    // 6 L09 p83a\
+    assert_eq!(
+        prim_mst(0, 8, vec![(1,0,1),(2,0,3),(3,0,4),(2,1,2),(2,1,4),(1,2,4),(1,2,5),(1,3,4),(2,3,6),(4,4,5),(2,4,6),(3,4,7),(4,5,7),(1,6,7)]),
+        vec![(1, 0, 1), (2, 0, 3), (1, 3, 4), (1, 2, 4), (1, 2, 5), (2, 3, 6), (1, 6, 7)]
+        // vec![(1,0,1),(2,1,4),(1,2,4),(1,2,5),(1,3,4),(2,4,6),(1,6,7)] // this was the first mst I tried, but it is not the one found by my algorithm for some reason
+        // maybe I can implement a cost-checker to verify that my solution achieves the same distances as the given answer so that I don't have to manually compare two msts
+    );
     // note, indices 1 and 2 are interchangeable for any tuple (weight, u, v) since we assume an undirected graph
     // also, we can deduce whether or not the algorithm was able to build a tree by checking to see if the return vec's len = n - 1
     println!("finished tests");
