@@ -1,3 +1,6 @@
+
+// following https://rust-classes.com/chapter_4_3.html
+
 use crate::person::Person;
 
 mod person;
