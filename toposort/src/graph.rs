@@ -1,35 +1,29 @@
-//
-// use crate std::collections::HashSet;
-// use crate std::collections::HashMap;
 
-// type Adl = HashMap<String, HashSet<String>>;
-//
-// struct Adl<N> {
-//     l: HashMap<N, HashSet<N>>,
-// }
 
-use crate std::collections::HashSet;
-use crate std::collections::HashMap;
-// use std::collections::hash_map::Entry;
 
-struct Adl<N> {
-    adl: HashMap<N, HashSet<N>>,
-}
+pub mod graph {
+    pub use crate::std::collections::HashMap;
+    pub use crate::std::collections::HashSet;
 
-impl Adl<N> {
-    pub fn add_directed_edge(a: N, b: N) {
-        let neighbors = adl.entry(a).or_insert(HashSet<N>::New());
-        if !neighbors.contains(b) {
-            *neighbors.insert(b);
-        }
-        if !adl.contains_key(b) {
-            adl.insert((b, HashSet<N>::New()));
+    struct Adl {
+        adl: HashMap<String, HashSet<String>>,
+    }
+
+    impl Adl {
+        pub fn add_directed_edge(a: N, b: N) {
+            let neighbors = adl.entry(a).or_insert(HashSet<String>::New());
+            if !neighbors.contains(b) {
+                *neighbors.insert(b);
+            }
+            if !adl.contains_key(b) {
+                adl.insert((b, HashSet<String>::New()));
+            }
         }
     }
-}
 
-pub fn create_graph() -> Adl<String> {
-    Adl<String> {
-        adl: HashMap<String, HashSet<String>>::New(),
-    };
+    pub fn create_graph() -> Adl {
+        Adl {
+            adl: HashMap<String, HashSet<String>>::New(),
+        };
+    }
 }
