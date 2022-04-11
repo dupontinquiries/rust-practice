@@ -18,53 +18,55 @@ fn mtx_mlt_ord_min_ops_recursive(dims: Vec<u64>, i: usize, j: usize) -> u64 {
     return m;
 }
 
-// fn mtx_mlt_ord_min_ops_dp(dims: Vec<(u64,u64)>) -> u64 {
-//     let mut t: Vec<u64> = Vec::with_capacity(dims.len()*dims.len()/2);
-//     // t[0 + dims.len()*0] = 0;
-//     for i in 0..dims.len() {
-//         t[i*dims.len()+i] = 0; // table[i][i] = 0
-//         for j in i+1..dims.len() {
-//             for k in i..j {
-//                 let num = t[(i-1)*dims.len()+j] + t[i*dims.len()+j-1] + (0);
-//                 if k == i || t[i*dims.len()+j] > num {
-//                     t[i*dims.len()+j] = num;    
-//                 }
-//             }
-//         }
-//     }
-//     return 0;
-// }
-
 fn mco(dims: Vec<u64>) -> u64 {
     let n = dims.len();
-    let mut t = vec![0 as u64; (n+1)*(n+1)/2+1];// Vec<u64> = Vec::with_capacity(n*n/2);
-    // println!("{:?}", t);
-    // for i in 1..n {
-    //     t[i*n+i] = 0;
-    // }
+    let mut t = vec![0 as u64; n*n+1];
+    // I realize that this algorithm's memory consumption could be halved, so I tried to halve the vec size but it messed with the numerical relationships.  A hashmap could be a good fit for this algorithm because it can maintain O(1) access times while retaining the information needed to identify the correct subproblems.
+    for i in 0..n {
+        t[i*n+i] = 0;
+    }
     for l in 2..n {
         for i in 1..n-l+1 {
             let j = i+l-1;
-            t[i*n+j] = u64::MAX;
-            for k in i..j-1 {
+            // t[i*n+j] = u64::MAX;
+            for k in i..j-1 { // finding optimal subproblem
                 let q = t[i*n+k] + t[(k+1)*n+j] + dims[i-1]*dims[k]*dims[j];
-                println!("table = {:?}", t);
                 if q < t[i*n+j] {
+                    println!("{}\n", fv_2d(&t, n, 4));
                     t[i*n+j] = q;
                 }
             }
         }
     }
-    return t[n+n];
+    return t[n+1];
 }
 
-// fn convert(v: Vec<(u64, u64)>) -> Vec<u64> {
-//     let mut v2: Vec<u64> = Vec::with_capacity(v.len());
-//     for i in 0..v.len() {
-//         v2[i] = v[i].0;//.append(v[i].0);
-//     }
-//     return v2;
-// }
+// format a flat 2d vector to a string
+fn fv_2d(v: &Vec<u64>, n: usize, d: u64) -> String {
+    let mut ss = "".to_string();
+    for i in 0..n {
+        for j in 0..n {
+            if i*n+j < v.len() {
+                for k in 0..d {
+                    let comp = u64::pow(10, k as u32);
+                    if comp > v[i*n+j] {
+                        for _a in 0..d-k {
+                            ss += " ";
+                        }
+                        break;
+                    }
+                }
+                ss += &(v[i*n+j].to_string() + " ");
+            }
+        }
+        if i < n-1 {
+            ss += "\n";
+        }
+    }
+    // ss += &(v[v.len()-1].to_string() + "]");
+    // ss += "]";
+    return ss;
+}
 
 // format a vector to a string
 fn fv(v: &Vec<u64>) -> String {
