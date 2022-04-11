@@ -28,20 +28,21 @@ fn mco(dims: Vec<u64>) -> u64 {
     for l in 2..n {
         for i in 1..n-l+1 {
             let j = i+l-1;
-            // t[i*n+j] = u64::MAX;
+            t[i*n+j] = 999999; //u64::MAX; // 999999 gives a cleaner output for my format function
+            println!("{}\n", fv_2d(&t, n, 6));
             for k in i..j-1 { // finding optimal subproblem
                 let q = t[i*n+k] + t[(k+1)*n+j] + dims[i-1]*dims[k]*dims[j];
                 if q < t[i*n+j] {
-                    println!("{}\n", fv_2d(&t, n, 4));
                     t[i*n+j] = q;
                 }
             }
         }
     }
-    return t[n+1];
+    return t[n+n];
 }
 
 // format a flat 2d vector to a string
+// TODO: fix table formatting
 fn fv_2d(v: &Vec<u64>, n: usize, d: u64) -> String {
     let mut ss = "".to_string();
     for i in 0..n {
