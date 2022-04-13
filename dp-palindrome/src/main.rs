@@ -16,10 +16,20 @@ fn longest_palindrome(s: String) -> i64 {
     let v: Vec<char> = s.chars().collect::<Vec<_>>();
     let n = v.len();
     let mut t = vec![1 as i64; n];
-    for i in n-2..=0 {
-        for j in i..n {
-            // if 
+    for ii in 2..=n {
+        let i = n - ii;
+        println!("{}", i);
+        println!("{}\n{}", fv_char(&v), fv_i64(&t));
+        let mut j = i;
+        while j + (t[j] as usize) < n {
+            j += t[j] as usize;
+            if v[j] == v[i] { // && t[i] < (j-i) as i64 {
+                t[i] += (j - i) as i64;
+            }
         }
+        // for j in i..n {
+        //     // if
+        // }
     }
 // // for i in 0..n {
 //     // build subproblems
