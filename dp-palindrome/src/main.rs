@@ -1,7 +1,6 @@
 // algorithm to solve the problem presented in my cs course hw
 // from dpv book
 
-
 fn main() {
     println!("running tests...");
     assert_eq!(longest_palindrome("ATATTA".to_string()), 4);
@@ -9,8 +8,6 @@ fn main() {
     assert_eq!(longest_palindrome("ACGTGTCAAAATCG".to_string()), 4);
     println!("passed all tests");
 }
-
-
 
 fn longest_palindrome(s: String) -> i64 {
     let v: Vec<char> = s.chars().collect::<Vec<_>>();
