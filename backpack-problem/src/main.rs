@@ -17,5 +17,6 @@ pub fn new_item(w: f64, v: f64) -> Item {
 
 
 fn main() {
-    println!("Hello, world!");
+    let item_1 = new_item(4, 8);
+    let item_2 = new_item(3, 0);
 }
