@@ -1,0 +1,52 @@
+To use polymorphism in functions for a library in Rust, you can define a trait with one or more methods that you want to implement for different types. Then, you can implement this trait for each type you want to support. Here is an example of how you could modify your code to use polymorphism:
+
+rust
+
+pub trait ZigZag<T> {
+    fn sorted_copy(arr: Vec<T>) -> Vec<T>;
+    fn sort(arr: &mut Vec<T>);
+}
+
+impl<T: PartialOrd + Copy> ZigZag<T> for ZigZag {
+    fn sorted_copy(mut arr: Vec<T>) -> Vec<T> {
+        arr.sort();
+        let n = arr.len();
+        for i in (1..n - 1).step_by(2) {
+            arr.swap(i, i + 1);
+        }
+        arr
+    }
+
+    fn sort(arr: &mut Vec<T>) {
+        arr.sort();
+        let n = arr.len();
+        for i in (1..n - 1).step_by(2) {
+            arr.swap(i, i + 1);
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn example_1() {
+        let mut arr = vec![4, 3, 7, 8, 6, 2, 1];
+        let res = vec![3, 7, 4, 8, 6, 2, 1];
+        ZigZag::<i32>::sort(&mut arr);
+        assert_eq!(arr, res);
+    }
+
+    #[test]
+    fn example_2() {
+        let mut arr = vec![1, 4, 3, 2];
+        let res = vec![1, 4, 2, 3];
+        ZigZag::<i32>::sort(&mut arr);
+        assert_eq!(arr, res);
+    }
+}
+
+Here, we defined a ZigZag trait that takes a generic type T. The trait has two methods, sorted_copy and sort. We then implemented this trait for the ZigZag struct for any type T that implements the PartialOrd and Copy traits. The sorted_copy method sorts the array and rearranges the elements in zig-zag fashion by swapping adjacent elements. The sort method sorts the array in-place and rearranges the elements in zig-zag fashion.
+
+In the test functions, we call the sort method using the ZigZag::<i32> syntax to specify that we are using the ZigZag implementation for i32 types. We also modified the test cases to use mutable vectors since the sort method modifies the vector in-place.
